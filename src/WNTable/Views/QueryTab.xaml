@@ -1,0 +1,45 @@
+<UserControl x:Class="WNTable.Views.QueryTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:avalon="http://icsharpcode.net/sharpdevelop/avalonedit">
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Style="{StaticResource TopBar}" Padding="8,5">
+            <DockPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="RunButton" Style="{StaticResource PrimaryButton}" Click="Run_Click"
+                            ToolTip="Chạy câu lệnh tại con trỏ, hoặc đoạn đang bôi đen (Ctrl+Enter)">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource Icon}" Text="&#xE768;" FontSize="10" Margin="0,0,6,0" />
+                            <TextBlock Text="Chạy" />
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="RunAllButton" Style="{StaticResource GhostButton}" Click="RunAll_Click" Margin="4,0,0,0"
+                            ToolTip="Chạy toàn bộ (Ctrl+Shift+Enter / F5)" Content="Chạy tất cả" />
+                    <Button x:Name="StopButton" Style="{StaticResource GhostButton}" Click="Stop_Click" ToolTip="Dừng truy vấn (Esc)" IsEnabled="False">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource Icon}" Text="&#xE71A;" FontSize="10" Margin="0,0,5,0" />
+                            <TextBlock Text="Dừng" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                <TextBlock Style="{StaticResource Muted}" FontSize="11" HorizontalAlignment="Right"
+                           Text="Ctrl+Enter chạy · Ctrl+Space gợi ý" />
+            </DockPanel>
+        </Border>
+
+        <Border DockPanel.Dock="Bottom" Style="{StaticResource BottomBar}">
+            <TextBlock x:Name="StatusText" Style="{StaticResource Muted}" FontSize="11.5" TextTrimming="CharacterEllipsis" />
+        </Border>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*" MinHeight="60" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="3*" MinHeight="60" />
+            </Grid.RowDefinitions>
+            <avalon:TextEditor x:Name="Editor" />
+            <GridSplitter Grid.Row="1" Height="1" HorizontalAlignment="Stretch" Background="{DynamicResource BorderBrush}" />
+            <TabControl x:Name="Results" Grid.Row="2" />
+        </Grid>
+    </DockPanel>
+</UserControl>

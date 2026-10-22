@@ -1,0 +1,6 @@
+﻿<Application x:Class="WNTable.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="MainWindow.xaml">
+    <!-- Theme dictionaries (light or dark palette + Theme/Controls.xaml) are merged in App.OnStartup. -->
+</Application>

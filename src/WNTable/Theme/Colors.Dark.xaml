@@ -1,0 +1,28 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Dark palette, modelled on TablePlus' dark look. -->
+    <SolidColorBrush x:Key="BgBrush" Color="#1E1E20" />
+    <SolidColorBrush x:Key="ChromeBrush" Color="#28282B" />
+    <SolidColorBrush x:Key="SidebarBrush" Color="#232326" />
+    <SolidColorBrush x:Key="BorderBrush" Color="#3A3A3E" />
+    <SolidColorBrush x:Key="GridLineBrush" Color="#2E2E32" />
+    <SolidColorBrush x:Key="TextBrush" Color="#E8E8EA" />
+    <SolidColorBrush x:Key="MutedBrush" Color="#8E8E93" />
+    <SolidColorBrush x:Key="AccentBrush" Color="#3B82F6" />
+    <SolidColorBrush x:Key="AccentHoverBrush" Color="#5592F7" />
+    <SolidColorBrush x:Key="AccentTextBrush" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="SelectionBrush" Color="#2C4870" />
+    <SolidColorBrush x:Key="SelectionStrongBrush" Color="#3B82F6" />
+    <SolidColorBrush x:Key="HeaderBrush" Color="#2A2A2D" />
+    <SolidColorBrush x:Key="AltRowBrush" Color="#222225" />
+    <SolidColorBrush x:Key="HoverBrush" Color="#36363A" />
+    <SolidColorBrush x:Key="PressedBrush" Color="#414146" />
+    <SolidColorBrush x:Key="InputBrush" Color="#2B2B2F" />
+    <SolidColorBrush x:Key="InputBorderBrush" Color="#46464B" />
+    <SolidColorBrush x:Key="ScrollThumbBrush" Color="#55555B" />
+    <SolidColorBrush x:Key="DangerBrush" Color="#F2555A" />
+    <SolidColorBrush x:Key="DangerSoftBrush" Color="#3A2023" />
+    <SolidColorBrush x:Key="SuccessBrush" Color="#3DD68C" />
+    <SolidColorBrush x:Key="ModifiedBrush" Color="#4A4020" />
+    <SolidColorBrush x:Key="ShadowBrush" Color="#66000000" />
+</ResourceDictionary>

@@ -1,0 +1,97 @@
+<Window x:Class="WNTable.Views.ConnectionDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:WNTable.Controls"
+        Style="{DynamicResource AppWindow}"
+        Title="Kết nối" Width="500" SizeToContent="Height" ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+    <Window.Resources>
+        <Style TargetType="TextBlock" x:Key="Label">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,0,12,0" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Foreground" Value="{DynamicResource MutedBrush}" />
+        </Style>
+    </Window.Resources>
+    <StackPanel Margin="20,18,20,16">
+        <Grid x:Name="Form">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="90" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="90" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Style="{StaticResource Label}" Text="Loại" />
+            <ComboBox x:Name="KindBox" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,0,0,10"
+                      SelectionChanged="KindBox_SelectionChanged" />
+
+            <TextBlock Grid.Row="1" Style="{StaticResource Label}" Text="Tên" />
+            <TextBox x:Name="NameBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,0,0,10"
+                     controls:Hint.Text="vd: Laragon local" />
+
+            <TextBlock Grid.Row="2" Style="{StaticResource Label}" Text="Nhãn" />
+            <ComboBox x:Name="ColorBox" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,0,0,10">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Border Width="14" Height="14" CornerRadius="7" Margin="0,0,8,0"
+                                    Background="{Binding Hex, Converter={x:Static controls:ColorBrushConverter.Instance}}" />
+                            <TextBlock Text="{Binding Label}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <!-- Server fields -->
+            <TextBlock x:Name="HostLabel" Grid.Row="3" Style="{StaticResource Label}" Text="Host" />
+            <TextBox x:Name="HostBox" Grid.Row="3" Grid.Column="1" Margin="0,0,0,10" />
+            <TextBlock x:Name="PortLabel" Grid.Row="3" Grid.Column="2" Style="{StaticResource Label}" Text="Port" Margin="12,0,8,10" />
+            <TextBox x:Name="PortBox" Grid.Row="3" Grid.Column="3" Margin="0,0,0,10" />
+
+            <TextBlock x:Name="UserLabel" Grid.Row="4" Style="{StaticResource Label}" Text="User" />
+            <TextBox x:Name="UserBox" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,0,0,10" />
+
+            <TextBlock x:Name="PasswordLabel" Grid.Row="5" Style="{StaticResource Label}" Text="Mật khẩu" />
+            <PasswordBox x:Name="PasswordBox" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,0,0,10" />
+
+            <TextBlock x:Name="DatabaseLabel" Grid.Row="6" Style="{StaticResource Label}" Text="Database" />
+            <TextBox x:Name="DatabaseBox" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,0,0,10"
+                     controls:Hint.Text="(tuỳ chọn)" />
+
+            <CheckBox x:Name="TrustCertBox" Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,0,0,10"
+                      Content="Tin chứng chỉ server (TrustServerCertificate)" />
+
+            <!-- SQLite -->
+            <TextBlock x:Name="FileLabel" Grid.Row="8" Style="{StaticResource Label}" Text="File" />
+            <DockPanel x:Name="FilePanel" Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="3" Margin="0,0,0,10">
+                <Button DockPanel.Dock="Right" Content="Mới…" Margin="6,0,0,0" Click="NewFile_Click" ToolTip="Tạo file SQLite mới" />
+                <Button DockPanel.Dock="Right" Content="Chọn…" Margin="6,0,0,0" Click="Browse_Click" />
+                <TextBox x:Name="FileBox" />
+            </DockPanel>
+        </Grid>
+
+        <TextBlock x:Name="HintText" Foreground="{DynamicResource MutedBrush}" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,10" />
+        <TextBlock x:Name="TestResult" TextWrapping="Wrap" Margin="0,0,0,12" Visibility="Collapsed" />
+
+        <DockPanel>
+            <Button x:Name="TestButton" Content="Kiểm tra" Click="Test_Click" DockPanel.Dock="Left" MinWidth="90" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Huỷ" IsCancel="True" MinWidth="80" Margin="0,0,8,0" />
+                <Button Content="Lưu" Click="Save_Click" MinWidth="80" Margin="0,0,8,0" />
+                <Button Content="Lưu &amp; kết nối" Click="SaveConnect_Click" IsDefault="True" MinWidth="120" Style="{StaticResource PrimaryButton}" />
+            </StackPanel>
+        </DockPanel>
+    </StackPanel>
+</Window>

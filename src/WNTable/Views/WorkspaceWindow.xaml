@@ -1,0 +1,104 @@
+<Window x:Class="WNTable.Views.WorkspaceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:WNTable.Controls"
+        Style="{DynamicResource AppWindow}"
+        Title="WNTable" Width="1280" Height="800" MinWidth="700" MinHeight="420"
+        WindowStartupLocation="CenterScreen">
+    <DockPanel>
+        <!-- Toolbar with the connection "address bar" in the middle, like TablePlus. -->
+        <Border DockPanel.Dock="Top" Style="{StaticResource TopBar}" Height="42" Padding="8,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Style="{StaticResource GhostButton}" Click="NewQuery_Click" ToolTip="Tab SQL mới (Ctrl+T)">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource Icon}" Text="&#xE943;" Margin="0,0,5,0" />
+                            <TextBlock Text="SQL" />
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource GhostButton}" Click="Refresh_Click" ToolTip="Làm mới (Ctrl+R)">
+                        <TextBlock Style="{StaticResource Icon}" Text="&#xE72C;" />
+                    </Button>
+                </StackPanel>
+
+                <Border Grid.Column="1" Background="{DynamicResource BgBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1"
+                        CornerRadius="6" Height="26" MinWidth="380" MaxWidth="720" Padding="6,0,10,0" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border x:Name="EnvTag" CornerRadius="4" Padding="6,0" Margin="0,0,8,0" Height="18">
+                            <TextBlock x:Name="EnvTagText" Foreground="White" FontSize="10.5" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        </Border>
+                        <TextBlock x:Name="ConnectionName" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        <TextBlock Text=" : " Style="{StaticResource Muted}" />
+                        <TextBlock x:Name="ConnectionKind" Style="{StaticResource Muted}" />
+                        <TextBlock x:Name="PillDbSep" Text=" : " Style="{StaticResource Muted}" />
+                        <TextBlock x:Name="PillDatabase" VerticalAlignment="Center" />
+                        <TextBlock x:Name="PillTabSep" Text=" : " Style="{StaticResource Muted}" />
+                        <TextBlock x:Name="PillTab" VerticalAlignment="Center" MaxWidth="240" TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="240" MinWidth="150" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Sidebar -->
+            <Border Background="{DynamicResource SidebarBrush}">
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Top" Margin="8,8,8,6">
+                        <ComboBox x:Name="DatabaseBox" Margin="0,0,0,6" SelectionChanged="DatabaseBox_SelectionChanged" ToolTip="Database" />
+                        <TextBox x:Name="TableSearch" Style="{StaticResource SearchBox}" controls:Hint.Text="Tìm bảng… (Ctrl+P)"
+                                 TextChanged="TableSearch_TextChanged" PreviewKeyDown="TableSearch_PreviewKeyDown" />
+                    </StackPanel>
+                    <TextBlock x:Name="SidebarStatus" DockPanel.Dock="Bottom" Margin="12,4,8,6" Style="{StaticResource Muted}"
+                               FontSize="11" TextWrapping="Wrap" />
+                    <ListBox x:Name="TableList"
+                             VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.VirtualizationMode="Recycling"
+                             PreviewMouseLeftButtonUp="TableList_MouseUp" MouseDoubleClick="TableList_DoubleClick"
+                             PreviewMouseDown="TableList_PreviewMouseDown" KeyDown="TableList_KeyDown">
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Mở" Click="OpenTable_Click" />
+                                <MenuItem Header="Mở trong tab mới" Click="OpenTableNewTab_Click" InputGestureText="Ctrl+Click" />
+                                <MenuItem Header="Xem cấu trúc" Click="OpenStructure_Click" />
+                                <Separator />
+                                <MenuItem Header="SELECT * trong tab SQL" Click="SelectQuery_Click" />
+                                <MenuItem Header="Sao chép tên" Click="CopyName_Click" />
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Style="{StaticResource Icon}" FontSize="11" Margin="0,0,7,0" Opacity="0.7"
+                                               Text="{Binding IsView, Converter={x:Static controls:TableIconConverter.Instance}}" />
+                                    <TextBlock Text="{Binding Display}" TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </Border>
+
+            <GridSplitter Grid.Column="1" Width="1" HorizontalAlignment="Stretch" Background="{DynamicResource BorderBrush}" />
+
+            <!-- Tabs -->
+            <Grid Grid.Column="2">
+                <TabControl x:Name="Tabs" SelectionChanged="Tabs_SelectionChanged" />
+                <StackPanel x:Name="EmptyText" HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False">
+                    <TextBlock Text="Chọn một bảng để xem dữ liệu" FontSize="13" HorizontalAlignment="Center" />
+                    <TextBlock Style="{StaticResource Muted}" HorizontalAlignment="Center" Margin="0,8,0,0" LineHeight="20" TextAlignment="Center"
+                               Text="Ctrl+P  tìm bảng&#10;Ctrl+T  tab SQL mới&#10;Ctrl+W  đóng tab" FontFamily="{StaticResource CodeFont}" FontSize="11" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>

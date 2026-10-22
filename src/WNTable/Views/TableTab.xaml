@@ -1,0 +1,149 @@
+<UserControl x:Class="WNTable.Views.TableTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:WNTable.Controls"
+             xmlns:avalon="http://icsharpcode.net/sharpdevelop/avalonedit">
+    <DockPanel>
+        <!-- Filter bar: hidden until Ctrl+F / the "Lọc" toggle, like TablePlus. -->
+        <Border x:Name="FilterBar" DockPanel.Dock="Top" Style="{StaticResource TopBar}" Padding="8,5" Visibility="Collapsed">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="WHERE" Style="{StaticResource Muted}" FontFamily="{StaticResource CodeFont}" FontSize="11" Margin="2,0,8,0" />
+                <TextBox x:Name="FilterBox" Grid.Column="1" FontFamily="{StaticResource CodeFont}" FontSize="12"
+                         controls:Hint.Text="id &gt; 100 AND name LIKE '%a%'" KeyDown="FilterBox_KeyDown" />
+                <Button Grid.Column="2" Style="{StaticResource PrimaryButton}" Content="Lọc" Margin="6,0,0,0" Click="ApplyFilter_Click"
+                        ToolTip="Áp dụng (Enter)" />
+                <Button Grid.Column="3" Style="{StaticResource GhostButton}" Margin="4,0,0,0" Click="CloseFilter_Click" ToolTip="Bỏ lọc (Esc)">
+                    <TextBlock Style="{StaticResource Icon}" Text="&#xE711;" FontSize="10" />
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- Error bar -->
+        <Border x:Name="ErrorBar" DockPanel.Dock="Top" Visibility="Collapsed" Background="{DynamicResource DangerSoftBrush}"
+                BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="10,6">
+            <DockPanel>
+                <Button DockPanel.Dock="Right" Style="{StaticResource GhostButton}" Click="CloseError_Click" VerticalAlignment="Top" MinHeight="20">
+                    <TextBlock Style="{StaticResource Icon}" Text="&#xE711;" FontSize="9" />
+                </Button>
+                <TextBlock x:Name="ErrorText" TextWrapping="Wrap" Foreground="{DynamicResource DangerBrush}" VerticalAlignment="Center" />
+            </DockPanel>
+        </Border>
+
+        <!-- Bottom bar -->
+        <Border DockPanel.Dock="Bottom" Style="{StaticResource BottomBar}">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Style="{StaticResource SegmentGroup}">
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton x:Name="DataMode" Style="{StaticResource Segment}" Content="Dữ liệu" IsChecked="True"
+                                         GroupName="mode" Checked="Mode_Checked" />
+                            <RadioButton x:Name="StructureMode" Style="{StaticResource Segment}" Content="Cấu trúc"
+                                         GroupName="mode" Checked="Mode_Checked" />
+                        </StackPanel>
+                    </Border>
+
+                    <StackPanel x:Name="EditButtons" Orientation="Horizontal" Margin="6,0,0,0">
+                        <Border Style="{StaticResource BarSeparator}" />
+                        <Button Style="{StaticResource GhostButton}" Click="AddRow_Click" ToolTip="Thêm dòng (Ctrl+I)">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource Icon}" Text="&#xE710;" FontSize="10" Margin="0,0,5,0" />
+                                <TextBlock Text="Dòng" />
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource GhostButton}" Click="DeleteRows_Click" ToolTip="Xoá dòng đang chọn (Del)">
+                            <TextBlock Style="{StaticResource Icon}" Text="&#xE738;" FontSize="10" />
+                        </Button>
+                    </StackPanel>
+
+                    <StackPanel x:Name="ChangesPanel" Orientation="Horizontal" Visibility="Collapsed">
+                        <Border Style="{StaticResource BarSeparator}" />
+                        <Button x:Name="DiscardButton" Style="{StaticResource GhostButton}" Click="Discard_Click" Content="Huỷ" ToolTip="Bỏ các thay đổi" />
+                        <Button x:Name="PreviewButton" Style="{StaticResource GhostButton}" Click="Preview_Click" Content="Xem SQL" ToolTip="Xem SQL sẽ chạy" />
+                        <Button x:Name="SaveButton" Style="{StaticResource PrimaryButton}" Click="Save_Click" Margin="4,0,0,0"
+                                ToolTip="Lưu thay đổi vào database (Ctrl+S)">
+                            <TextBlock x:Name="SaveText" Text="Lưu" />
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel x:Name="PagingBar" DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center">
+                    <ToggleButton x:Name="FilterToggle" Style="{StaticResource GhostToggle}" ToolTip="Lọc dữ liệu (Ctrl+F)"
+                                  Checked="FilterToggle_Changed" Unchecked="FilterToggle_Changed">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource Icon}" Text="&#xE71C;" FontSize="11" Margin="0,0,5,0" />
+                            <TextBlock Text="Lọc" />
+                        </StackPanel>
+                    </ToggleButton>
+                    <Button Style="{StaticResource GhostButton}" Click="Reload_Click" ToolTip="Tải lại (F5)">
+                        <TextBlock Style="{StaticResource Icon}" Text="&#xE72C;" FontSize="11" />
+                    </Button>
+                    <Border Style="{StaticResource BarSeparator}" />
+                    <ComboBox x:Name="PageSizeBox" Width="70" MinHeight="22" SelectionChanged="PageSize_Changed" ToolTip="Số dòng mỗi trang" />
+                    <Button x:Name="PrevButton" Style="{StaticResource GhostButton}" Click="PrevPage_Click" ToolTip="Trang trước" Margin="4,0,0,0">
+                        <TextBlock Style="{StaticResource Icon}" Text="&#xE76B;" FontSize="10" />
+                    </Button>
+                    <TextBlock x:Name="PageText" VerticalAlignment="Center" MinWidth="56" TextAlignment="Center" />
+                    <Button x:Name="NextButton" Style="{StaticResource GhostButton}" Click="NextPage_Click" ToolTip="Trang sau">
+                        <TextBlock Style="{StaticResource Icon}" Text="&#xE76C;" FontSize="10" />
+                    </Button>
+                </StackPanel>
+
+                <TextBlock x:Name="StatusText" Style="{StaticResource Muted}" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis"
+                           Margin="12,0" FontSize="11.5" />
+            </DockPanel>
+        </Border>
+
+        <Grid>
+            <DataGrid x:Name="Grid" Sorting="Grid_Sorting" CellEditEnding="Grid_CellEditEnding" PreviewKeyDown="Grid_PreviewKeyDown">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Sao chép" Command="ApplicationCommands.Copy" InputGestureText="Ctrl+C" />
+                        <MenuItem Header="Sao chép dòng dạng INSERT" Click="CopyInsert_Click" />
+                        <MenuItem Header="Xem / sửa giá trị…" Click="EditValue_Click" InputGestureText="Shift+Enter" />
+                        <MenuItem x:Name="SetNullItem" Header="Đặt NULL" Click="SetNull_Click" />
+                        <Separator />
+                        <MenuItem Header="Lọc theo giá trị này" Click="FilterByValue_Click" />
+                        <Separator />
+                        <MenuItem x:Name="AddRowItem" Header="Thêm dòng" Click="AddRow_Click" InputGestureText="Ctrl+I" />
+                        <MenuItem x:Name="DeleteRowItem" Header="Xoá dòng" Click="DeleteRows_Click" InputGestureText="Del" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+            </DataGrid>
+
+            <TabControl x:Name="StructurePanel" Visibility="Collapsed">
+                <TabItem Header="Cột">
+                    <DataGrid x:Name="ColumnsGrid" IsReadOnly="True" AutoGenerateColumns="False" GridLinesVisibility="Vertical">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Tên" Binding="{Binding Name}" FontWeight="SemiBold" MinWidth="120" />
+                            <DataGridTextColumn Header="Kiểu" Binding="{Binding DataType}" MinWidth="110" />
+                            <DataGridCheckBoxColumn Header="Null" Binding="{Binding Nullable}" />
+                            <DataGridTextColumn Header="Mặc định" Binding="{Binding Default}" MinWidth="90" />
+                            <DataGridCheckBoxColumn Header="Khoá chính" Binding="{Binding IsPrimaryKey}" />
+                            <DataGridTextColumn Header="Extra" Binding="{Binding Extra}" MinWidth="90" />
+                            <DataGridTextColumn Header="Ghi chú" Binding="{Binding Comment}" Width="*" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Header="Index">
+                    <DataGrid x:Name="IndexesGrid" IsReadOnly="True" AutoGenerateColumns="False" GridLinesVisibility="Vertical">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Tên" Binding="{Binding Name}" FontWeight="SemiBold" MinWidth="140" />
+                            <DataGridTextColumn Header="Cột" Binding="{Binding Columns}" Width="*" />
+                            <DataGridCheckBoxColumn Header="Unique" Binding="{Binding IsUnique}" />
+                            <DataGridCheckBoxColumn Header="Primary" Binding="{Binding IsPrimary}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Header="DDL">
+                    <avalon:TextEditor x:Name="DdlEditor" />
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </DockPanel>
+</UserControl>
