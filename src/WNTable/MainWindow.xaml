@@ -17,16 +17,8 @@
                 <TextBlock DockPanel.Dock="Bottom" Style="{StaticResource Muted}" FontSize="11" TextWrapping="Wrap"
                            Text="Enter: kết nối · F2: sửa · Del: xoá&#10;Ctrl+N: kết nối mới · Ctrl+O: mở SQLite" />
                 <StackPanel>
-                    <Border Width="64" Height="64" CornerRadius="14" HorizontalAlignment="Center">
-                        <Border.Background>
-                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                <GradientStop Color="#4C8DF6" Offset="0" />
-                                <GradientStop Color="#2457C5" Offset="1" />
-                            </LinearGradientBrush>
-                        </Border.Background>
-                        <TextBlock Text="WN" Foreground="White" FontSize="24" FontWeight="Bold"
-                                   HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    </Border>
+                    <Image Source="pack://application:,,,/Assets/logo-mark.png" Width="72" Height="72"
+                           RenderOptions.BitmapScalingMode="HighQuality" HorizontalAlignment="Center" />
                     <TextBlock Text="WebNowTable" FontSize="20" FontWeight="SemiBold" HorizontalAlignment="Center" Margin="0,12,0,0" />
                     <TextBlock x:Name="VersionText" Style="{StaticResource Muted}" HorizontalAlignment="Center" Margin="0,2,0,24" />
 
@@ -91,10 +83,10 @@
                                     <TextBlock Text="{Binding Subtitle}" Opacity="0.65" FontSize="11" TextTrimming="CharacterEllipsis" />
                                 </StackPanel>
                                 <Border Grid.Column="2" CornerRadius="4" Padding="6,1" Margin="10,0,0,0" VerticalAlignment="Center"
-                                        BorderThickness="1" BorderBrush="{Binding Color, Converter={x:Static controls:ColorBrushConverter.Instance}}"
+                                        Background="{Binding Color, Converter={x:Static controls:ColorBrushConverter.Instance}}"
                                         Visibility="{Binding Color, Converter={x:Static controls:EnvTagVisibilityConverter.Instance}}">
                                     <TextBlock Text="{Binding Color, Converter={x:Static controls:EnvTagConverter.Instance}}" FontSize="10.5"
-                                               Foreground="{Binding Color, Converter={x:Static controls:ColorBrushConverter.Instance}}" />
+                                               FontWeight="SemiBold" Foreground="White" />
                                 </Border>
                             </Grid>
                         </DataTemplate>

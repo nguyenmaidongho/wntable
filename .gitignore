@@ -483,3 +483,6 @@ $RECYCLE.BIN/
 
 # Published exe
 dist/
+
+# Brand source files (PSD, zip, full-size PNGs); the app uses src/WNTable/Assets
+LogoWNregistered/

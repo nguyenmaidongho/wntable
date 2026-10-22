@@ -31,6 +31,7 @@ public partial class WorkspaceWindow : Window
     public WorkspaceWindow(DbDriver driver)
     {
         InitializeComponent();
+        App.PrepareWindow(this);
         Driver = driver;
         ConnectionName.Text = driver.Info.Name;
         ConnectionKind.Text = driver.Info.KindLabel;

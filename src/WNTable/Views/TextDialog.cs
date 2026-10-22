@@ -94,7 +94,7 @@ public static class TextDialog
             frame.SetResourceReference(Border.BorderBrushProperty, "BorderBrush");
             root.Children.Add(frame);
         }
-        return new Window
+        var window = new Window
         {
             Style = (Style)Application.Current.FindResource("AppWindow"),
             Title = title,
@@ -105,5 +105,7 @@ public static class TextDialog
             ShowInTaskbar = false,
             Content = root,
         };
+        App.PrepareWindow(window);
+        return window;
     }
 }

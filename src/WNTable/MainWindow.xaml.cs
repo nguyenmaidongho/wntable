@@ -20,6 +20,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        App.PrepareWindow(this);
         VersionText.Text = "Phiên bản " + typeof(App).Assembly.GetName().Version?.ToString(3);
         List<ConnectionInfo> saved;
         try

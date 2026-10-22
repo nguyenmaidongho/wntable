@@ -28,22 +28,24 @@ public partial class App : Application
         // Scrollbar corners and a few built-in parts paint with the system control color.
         Resources[SystemColors.ControlBrushKey] = FindResource("BgBrush");
         DispatcherUnhandledException += OnUnhandledException;
-        if (IsDark) EventManager.RegisterClassHandler(typeof(Window), FrameworkElement.LoadedEvent, new RoutedEventHandler(UseDarkTitleBar));
         base.OnStartup(e);
+    }
+
+    /// <summary>Call from every window's constructor: gives it a dark caption bar in dark mode.</summary>
+    public static void PrepareWindow(Window window)
+    {
+        if (!IsDark) return;
+        // SourceInitialized runs after the HWND exists but before the window is shown, so the caption is painted dark from the start.
+        window.SourceInitialized += (_, _) =>
+        {
+            var on = 1;
+            const int DwmwaUseImmersiveDarkMode = 20; // Windows 10 20H1+ / 11
+            DwmSetWindowAttribute(new WindowInteropHelper(window).Handle, DwmwaUseImmersiveDarkMode, ref on, sizeof(int));
+        };
     }
 
     [DllImport("dwmapi.dll")]
     private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attribute, ref int value, int size);
-
-    /// <summary>Dark caption bar to match the dark palette (Windows 10 20H1+ / 11).</summary>
-    private static void UseDarkTitleBar(object sender, RoutedEventArgs e)
-    {
-        var hwnd = new WindowInteropHelper((Window)sender).Handle;
-        if (hwnd == IntPtr.Zero) return;
-        var on = 1;
-        const int DwmwaUseImmersiveDarkMode = 20;
-        DwmSetWindowAttribute(hwnd, DwmwaUseImmersiveDarkMode, ref on, sizeof(int));
-    }
 
     private static void OnUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {

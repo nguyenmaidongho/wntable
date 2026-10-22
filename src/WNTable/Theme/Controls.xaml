@@ -37,6 +37,7 @@
 
     <!-- ===== Windows ===== -->
     <Style x:Key="AppWindow" TargetType="Window">
+        <Setter Property="Icon" Value="pack://application:,,,/Assets/app.ico" />
         <Setter Property="Background" Value="{DynamicResource BgBrush}" />
         <Setter Property="Foreground" Value="{DynamicResource TextBrush}" />
         <Setter Property="FontFamily" Value="{StaticResource UiFont}" />

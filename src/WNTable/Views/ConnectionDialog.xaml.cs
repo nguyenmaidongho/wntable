@@ -15,6 +15,7 @@ public partial class ConnectionDialog : Window
     public ConnectionDialog(ConnectionInfo info)
     {
         InitializeComponent();
+        App.PrepareWindow(this);
         _info = info;
         Title = string.IsNullOrEmpty(info.Name) ? "Kết nối mới" : "Sửa kết nối — " + info.Name;
 
